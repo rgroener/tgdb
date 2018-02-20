@@ -1,16 +1,12 @@
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Current Time</title>
-</head>
-<body>
+{% block title %}
+	Title from child template
+{% endblock %}
 
-    {# This is a comment #}
-
-    {# check the existence of now variable in the template using if tag #}
-
+{% block content %}
+	
+	
     {% if now %}   
         <p>Current date and time is {{ now }}</p>
     {% else %}               
@@ -18,6 +14,11 @@
     {% endif %}
 
     <p>Current scheme: {{ request.scheme }}</p>
+    <p>BASE_DIR : {{ base_dir }}</p>
 
-</body>
-</html>
+{% endblock %}
+
+{% block footer %}
+	{{ block.super }}
+	<p>All rights reserved</p>
+{% endblock %}
