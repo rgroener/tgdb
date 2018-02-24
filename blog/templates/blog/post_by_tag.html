@@ -13,7 +13,7 @@
 
     {% for post in posts %}
         <h3>
-            <a href="http://127.0.0.1:8000/blog/{{ post.pk }}/">{{ post.title|capfirst }}</a>
+            <a href="http://127.0.0.1:8000/{{ post.pk }}/">{{ post.title|capfirst }}</a>
         </h3>
         <p>
             <span>Date: {{ post.pub_date }} </span> |
