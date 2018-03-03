@@ -19,10 +19,9 @@ class AuthorForm(forms.Form):
         return self.cleaned_data['email'].lower()
     
     class TagForm(forms.ModelForm):
-
-    class Meta:
-        model = Tag
-        fields = '__all__'
+        class Meta:
+            model = Tag
+            fields = '__all__'
 
     def clean_name(self):
         n = self.cleaned_data['name']
