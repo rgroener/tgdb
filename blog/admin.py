@@ -29,12 +29,18 @@ class CategoryAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
 	list_display = ('name','slug',)
 	search_fileds = ('name',)
-
 	
+class FeedbackAdmin(admin.ModelAdmin):
+	list_display = ('name', 'email', 'subject','date',)
+	search_fields = ('name', 'email',)
+	date_hierarchy = 'date'
+
+
 admin.site.register(models.Post, PostAdmin)
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Author, AuthorAdmin)
 admin.site.register(models.Tag, TagAdmin)
+admin.site.register(models.Feedback, FeedbackAdmin)
 
 
 	
