@@ -4,13 +4,30 @@ from .models import Author, Tag, Category, Post
 from django.contrib import messages
 from .forms import FeedbackForm
 from django.core.mail import mail_admins
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django_project import helpers
 
 def index(request):
 		return HttpResponse("Hello Django")
 
 def post_list(request):
-	posts = Post.objects.order_by("-id").all()
-	return render(request, 'blog/post_list.html', {'posts': posts})
+    posts = Post.objects.order_by("-id").all()
+    paginator = Paginator(posts, 10)
+
+    # get the page parameter from the query string
+    # if page parameter is available get() method will return empty string ''
+    page = request.GET.get('page')
+
+    try:
+        # create Page object for the given page
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        # if page parameter in the query string is not available, return the first page
+        posts = paginator.page(1)
+    except EmptyPage:
+        # if the value of the page parameter exceeds num_pages then return the last page
+        posts = paginator.page(paginator.num_pages)
+    return render(request, 'blog/post_list.html', {'posts': posts})
 	
 def post_detail(request, pk): 
 	post = get_object_or_404(Post, pk=pk)
@@ -19,7 +36,8 @@ def post_detail(request, pk):
 # view function to display post by category
 def post_by_category(request, category_slug):
     category = get_object_or_404(Category, slug=category_slug)
-    posts = get_list_or_404(Post.objects.order_by("-id"), category__slug=category_slug)
+    posts = get_list_or_404(Post.objects.order_by("-id"), category=category)
+    posts = helpers.pg_records(request, posts, 5)
     context = {
         'category': category,
         'posts': posts
@@ -30,7 +48,8 @@ def post_by_category(request, category_slug):
 # view function to display post by tag
 def post_by_tag(request, tag_slug):
     tag = get_object_or_404(Tag, slug=tag_slug)
-    posts = get_list_or_404(Post.objects.order_by("-id"), tags__name=tag)
+    posts = get_list_or_404(Post.objects.order_by("-id"), tags=tag)
+    posts = helpers.pg_records(request, posts, 5)
     context = {
         'tag': tag,
         'posts': posts
