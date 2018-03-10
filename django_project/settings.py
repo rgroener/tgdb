@@ -148,3 +148,5 @@ ADMINS = [
 MANAGERS = ADMINS
 
 ########################
+
+LOGIN_URL = 'login'
